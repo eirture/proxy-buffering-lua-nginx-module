@@ -3,7 +3,7 @@
 #include "ngx_http_lua_api.h"
 #include "lauxlib.h"
 
-ngx_module_t ngx_http_lua_proxy_buffering;
+ngx_module_t ngx_http_lua_proxy_buffering_module;
 
 static ngx_int_t ngx_http_lua_proxy_buffering_init(ngx_conf_t *cf);
 
@@ -18,7 +18,7 @@ static ngx_http_module_t ngx_http_lua_proxy_buffering_ctx = {
     NULL                               /* merge location configuration */
 };
 
-ngx_module_t ngx_http_lua_proxy_buffering = {
+ngx_module_t ngx_http_lua_proxy_buffering_module = {
     NGX_MODULE_V1,
     &ngx_http_lua_proxy_buffering_ctx, /* module context */
     NULL,                              /* module directives */
@@ -35,8 +35,9 @@ ngx_module_t ngx_http_lua_proxy_buffering = {
 static int set_proxy_request_buffering(lua_State *L)
 {
     ngx_http_request_t *r;
-    n int;
-    buffering int;
+    int n;
+    int buffering;
+    n = lua_gettop(L);
 
     r = ngx_http_lua_get_request(L);
     if (n != 1)
@@ -55,8 +56,9 @@ static int set_proxy_buffering(lua_State *L)
 {
     ngx_http_request_t *r;
     ngx_http_upstream_t *u;
-    n int;
-    buffering int;
+    int n;
+    int buffering;
+    n = lua_gettop(L);
 
     if (n != 1)
     {
@@ -70,10 +72,9 @@ static int set_proxy_buffering(lua_State *L)
 
     if (u == NULL)
     {
-        *err = "no upstream found";
         return NGX_ERROR;
     }
-    r->upstream.buffering = buffering;
+    u->buffering = buffering;
     return 0;
 }
 
