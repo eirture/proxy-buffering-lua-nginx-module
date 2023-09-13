@@ -1,0 +1,7 @@
+t/servroot/
+*~
+*.swp
+build12
+buildroot/
+nginx/
+go
